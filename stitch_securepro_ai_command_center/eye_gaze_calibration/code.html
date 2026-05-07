@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eye Gaze Calibration</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --surface: #fbf8fe;
+    --on-surface: #1b1b1f;
+    --primary: #161c54;
+    --primary-container: #2d336b;
+    --on-primary: #ffffff;
+    --text-muted: #46464f;
+    --radius-lg: 1rem;
+    --radius-md: 0.75rem;
+    --accent-mint: #00FF9D; /* Keeping mint for progress/success as per design system hints */
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--surface);
+    color: var(--on-surface);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  #gaze-calibration-screen {
+    position: fixed;
+    inset: 0;
+    background: rgba(251, 248, 254, 0.95);
+    backdrop-filter: blur(20px);
+    z-index: 400;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .calib-container {
+    text-align: center;
+    max-width: 600px;
+    padding: 3rem 2rem;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05);
+    border: 1px solid #E2E8F0;
+  }
+
+  #calib-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e4e1e7;
+    border-radius: 999px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+
+  #calib-progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #2d336b;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .calib-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0 0 1rem;
+  }
+
+  .calib-desc {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 2rem;
+  }
+
+  .calib-desc strong {
+    color: var(--primary-container);
+    font-weight: 600;
+  }
+
+  .lucy-btn {
+    background-color: var(--primary-container);
+    color: var(--on-primary);
+    border: none;
+    padding: 12px 32px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(45, 51, 107, 0.2);
+  }
+
+  .lucy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(45, 51, 107, 0.3);
+  }
+
+  .lucy-btn:active {
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div id="gaze-calibration-screen">
+    <div class="calib-container">
+        <div id="calib-progress-bar">
+            <div id="calib-progress-fill"></div>
+        </div>
+        <h2 class="calib-title">Eye-Gaze Calibration</h2>
+        <p class="calib-desc">
+            To ensure accurate proctoring, please click each of the <strong>9 calibration dots</strong> until they turn green. Keep your head still and follow the dots with your eyes.
+        </p>
+        <button id="start-calib-btn" class="lucy-btn" onclick="startCalibrationProcess()">
+            Start Calibration
+        </button>
+    </div>
+    <!-- Dots will be injected here via JS -->
+</div>
+
+</body>
+</html>

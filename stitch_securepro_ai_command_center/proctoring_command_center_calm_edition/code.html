@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calm & Focused Proctoring Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --surface: #fbf8fe;
+    --on-surface: #1b1b1f;
+    --primary: #161c54;
+    --primary-container: #2d336b;
+    --on-primary: #ffffff;
+    --text-muted: #46464f;
+    --border: #e4e1e7;
+    --error: #ba1a1a;
+    --error-container: #ffdad6;
+    --warning: #eab308;
+    --success: #059669;
+    --radius-lg: 1rem;
+    --radius-md: 0.75rem;
+    --shadow-card: 0px 4px 20px rgba(15, 23, 42, 0.05);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--surface);
+    color: var(--on-surface);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #exam-interface {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .exam-sidebar {
+    width: 280px;
+    background: #ffffff;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    z-index: 10;
+  }
+
+  .sidebar-header {
+    margin-bottom: 2rem;
+  }
+
+  #paper-title-sidebar {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .timer-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .timer-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  #exam-countdown {
+    font-family: monospace;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--primary-container);
+  }
+
+  #exam-cam-wrap {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #000;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+  }
+
+  #exam-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .indicator-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .indicator {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 10px;
+    color: var(--success);
+    font-weight: 500;
+  }
+
+  .indicator i {
+    font-size: 14px;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .q-nav-section {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .q-nav-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  #q-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .q-nav-btn {
+    aspect-ratio: 1;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .q-nav-btn:hover {
+    border-color: var(--primary-container);
+    color: var(--primary-container);
+  }
+
+  .btn-submit {
+    width: 100%;
+    background-color: var(--primary-container);
+    color: var(--on-primary);
+    border: none;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.2s;
+  }
+
+  .btn-submit:hover {
+    background-color: var(--primary);
+  }
+
+  .exam-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    position: relative;
+  }
+
+  .exam-topbar {
+    padding: 1.5rem 3rem;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #paper-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  .proctored-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary-container);
+  }
+
+  .dot-pulse {
+    width: 8px;
+    height: 8px;
+    background-color: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(5, 150, 105, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+  }
+
+  .exam-content-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  #paper-content {
+    width: 100%;
+    max-width: 800px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 3rem;
+    min-height: 100%;
+  }
+
+  /* Glassmorphism focus overlay */
+  .violation-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(251, 248, 254, 0.7);
+    backdrop-filter: blur(20px);
+    z-index: 500;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .violation-card {
+    background: var(--error-container);
+    padding: 2rem 3rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    border: 1px solid rgba(186, 26, 26, 0.2);
+    box-shadow: 0 10px 30px rgba(186, 26, 26, 0.1);
+  }
+
+  .violation-card h1 {
+    color: var(--error);
+    margin: 0 0 0.5rem;
+    font-size: 24px;
+  }
+
+  .violation-card p {
+    color: #93000a;
+    margin: 0;
+    font-size: 15px;
+  }
+
+</style>
+</head>
+<body>
+
+<div id="exam-interface">
+    
+    <!-- Violation Overlay -->
+    <div class="violation-overlay" id="v-overlay">
+        <div class="violation-card">
+            <i class="fas fa-exclamation-triangle" style="font-size: 32px; color: var(--error); margin-bottom: 1rem;"></i>
+            <h1 id="v-msg">Attention Required</h1>
+            <p>Please return to the exam window.</p>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="exam-sidebar">
+        <div class="sidebar-header">
+            <div id="paper-title-sidebar">Exam Title</div>
+            <div class="timer-box">
+                <div class="timer-label">Time Remaining</div>
+                <div id="exam-countdown">45:00</div>
+            </div>
+        </div>
+
+        <div id="exam-cam-wrap">
+            <video id="exam-video" autoplay muted playsinline></video>
+        </div>
+
+        <div class="indicator-row">
+            <div class="indicator"><i class="fas fa-user"></i>Face</div>
+            <div class="indicator"><i class="fas fa-microphone"></i>Audio</div>
+            <div class="indicator"><i class="fas fa-eye"></i>Gaze</div>
+        </div>
+
+        <div class="q-nav-section">
+            <div class="q-nav-title">Questions</div>
+            <div id="q-nav-grid">
+                <button class="q-nav-btn">1</button>
+                <button class="q-nav-btn">2</button>
+                <button class="q-nav-btn">3</button>
+                <button class="q-nav-btn">4</button>
+                <button class="q-nav-btn">5</button>
+            </div>
+        </div>
+
+        <button class="btn-submit" onclick="submitPaper()">Submit Exam</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="exam-main">
+        <div class="exam-topbar">
+            <h1 id="paper-title">Data Structures Final</h1>
+            <div class="proctored-badge">
+                <div class="dot-pulse"></div> Session Monitored
+            </div>
+        </div>
+        <div class="exam-content-area">
+            <div id="paper-content">
+                <!-- Exam questions will be injected here -->
+                <h3 style="margin-top:0;">Question 1</h3>
+                <p>Describe the time complexity of QuickSort in the worst-case scenario.</p>
+                <textarea style="width:100%; height:150px; padding:12px; border:1px solid var(--border); border-radius:var(--radius-md); font-family:'Inter',sans-serif; margin-top:1rem; resize:vertical;"></textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

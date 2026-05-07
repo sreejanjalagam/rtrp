@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --surface: #fbf8fe;
+    --on-surface: #1b1b1f;
+    --primary: #161c54;
+    --primary-container: #2d336b;
+    --on-primary: #ffffff;
+    --text-muted: #46464f;
+    --border: #e4e1e7;
+    --radius-lg: 1rem;
+    --radius-md: 0.75rem;
+    --shadow-card: 0px 4px 20px rgba(15, 23, 42, 0.05);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--surface);
+    color: var(--on-surface);
+    min-height: 100vh;
+  }
+
+  /* Fixed Top Navbar */
+  .navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-brand {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-brand i {
+    color: var(--primary-container);
+  }
+
+  .btn-logout {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-logout:hover {
+    background: #f8fafc;
+    color: #ba1a1a;
+    border-color: #cbd5e1;
+  }
+
+  /* 12-Column Grid Layout */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem;
+  }
+
+  .header-section {
+    margin-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0 0 1.5rem;
+  }
+
+  .tabs-container {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    position: relative;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .tab-btn:hover {
+    color: var(--primary-container);
+  }
+
+  .tab-btn.active {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-container);
+    border-radius: 3px 3px 0 0;
+  }
+
+  /* Exam Card List */
+  .grid-layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+  }
+
+  .exam-card {
+    grid-column: span 12;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-card);
+    transition: all 0.2s;
+  }
+
+  .exam-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0px 8px 25px rgba(15, 23, 42, 0.08);
+  }
+
+  .exam-info h3 {
+    margin: 0 0 0.5rem;
+    font-size: 18px;
+    color: var(--on-surface);
+  }
+
+  .exam-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .exam-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-start {
+    background: var(--primary-container);
+    color: var(--on-primary);
+    border: none;
+    padding: 10px 24px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-start:hover {
+    background: var(--primary);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+  
+  /* Empty State */
+  .empty-state {
+    grid-column: span 12;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #ffffff;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+  }
+  
+  .empty-state i {
+    font-size: 32px;
+    color: #cbd5e1;
+    margin-bottom: 1rem;
+  }
+  
+  .empty-state p {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="student-screen">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-graduation-cap"></i>
+            Student Portal
+        </div>
+        <button class="btn-logout" onclick="location.reload()">
+            <i class="fas fa-sign-out-alt" style="margin-right: 6px;"></i> Sign Out
+        </button>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1 class="page-title">Dashboard</h1>
+            <div class="tabs-container">
+                <button class="tab-btn active" id="tab-stu-exams" onclick="switchStudentTab('exams')">My Exams</button>
+                <button class="tab-btn" id="tab-stu-results" onclick="switchStudentTab('results')">Past Results</button>
+            </div>
+        </div>
+
+        <!-- Exams List -->
+        <div id="my-exam-list" class="grid-layout">
+            <div class="exam-card">
+                <div class="exam-info">
+                    <h3>Advanced Data Structures - Midterm</h3>
+                    <div class="exam-meta">
+                        <span><i class="far fa-calendar"></i> Today, 2:00 PM</span>
+                        <span><i class="far fa-clock"></i> 60 mins</span>
+                        <span><i class="fas fa-shield-alt" style="color: #2d336b;"></i> Proctored</span>
+                    </div>
+                </div>
+                <button class="btn-start">Start Exam</button>
+            </div>
+            
+            <div class="exam-card">
+                <div class="exam-info">
+                    <h3>Operating Systems - Quiz 4</h3>
+                    <div class="exam-meta">
+                        <span><i class="far fa-calendar"></i> Tomorrow, 10:00 AM</span>
+                        <span><i class="far fa-clock"></i> 30 mins</span>
+                    </div>
+                </div>
+                <button class="btn-start" style="background: transparent; border: 1px solid var(--border); color: var(--text-muted);" disabled>Upcoming</button>
+            </div>
+        </div>
+
+        <!-- Results List -->
+        <div id="my-results-list" class="grid-layout hidden">
+            <div class="empty-state">
+                <i class="fas fa-chart-line"></i>
+                <p>No past results available yet.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchStudentTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('tab-stu-' + tab).classList.add('active');
+        
+        if (tab === 'exams') {
+            document.getElementById('my-exam-list').classList.remove('hidden');
+            document.getElementById('my-results-list').classList.add('hidden');
+        } else {
+            document.getElementById('my-exam-list').classList.add('hidden');
+            document.getElementById('my-results-list').classList.remove('hidden');
+        }
+    }
+</script>
+
+</body>
+</html>
